@@ -8,7 +8,7 @@ import folium
 from streamlit_folium import st_folium
 
 '''
-# TaxiFareModel front
+# David-goag's TaxiFareModel
 '''
 
 
@@ -40,24 +40,10 @@ passenger_count = st.slider('Select the number of passengers', 1, 8, 2)
 
 #pickup_df = pd.DataFrame({'lon': [pickup_longitude], 'lat': [pickup_latitude]})
 #dropoff_df = pd.DataFrame({'lon': [dropoff_longitude], 'lat': [dropoff_latitude]})
-map_df = pd.DataFrame({'lon': [pickup_longitude, dropoff_longitude], 'lat': [pickup_latitude, dropoff_latitude], "color": ["#00ff00", "#ffff00"], "location": ["Pickup", "Dropoff"]})
+map_df = pd.DataFrame({'lon': [pickup_longitude_input, dropoff_longitude_input], 'lat': [pickup_latitude_input, dropoff_latitude_input], "color": ["#00ff00", "#ffff00"], "location": ["Pickup", "Dropoff"]})
 
 #st.map(pickup_df)
 #st.map(dropoff_df, color="#ffff00")
-
-m = folium.Map(location=[(pickup_latitude+dropoff_latitude)/2, (pickup_longitude+dropoff_longitude)/2], zoom_start=14)
-for i in range(0,len(map_df)):
-   folium.Marker(
-      location=[map_df.iloc[i]['lat'], map_df.iloc[i]['lon']],
-      popup=map_df.iloc[i]['location'],
-      icon=folium.DivIcon(html=f"""
-            <div><svg>
-                <circle cx="20" cy="20" r="20" fill={map_df.iloc[i]['color']} opacity=".4"/>
-            </svg></div>""")
-   ).add_to(m)
-
-# call to render Folium map in Streamlit
-st_data = st_folium(m, width=725)
 
 
 url = 'https://taxifare-505391779697.europe-southwest1.run.app/predict?'
@@ -75,5 +61,19 @@ response = requests.get(url, params=params)
 
 #st.write("Fare: ", response.json()["fare"])
 f'''
-# Me debes {round(response.json()["fare"], 2)}$
+# Me debes **{round(response.json()["fare"], 2)}**$
 '''
+
+m = folium.Map(location=[(pickup_latitude+dropoff_latitude)/2, (pickup_longitude+dropoff_longitude)/2], zoom_start=14)
+for i in range(0,len(map_df)):
+   folium.Marker(
+      location=[map_df.iloc[i]['lat'], map_df.iloc[i]['lon']],
+      popup=map_df.iloc[i]['location'],
+      icon=folium.DivIcon(html=f"""
+            <div><svg>
+                <circle cx="20" cy="20" r="20" fill={map_df.iloc[i]['color']} opacity=".4"/>
+            </svg></div>""")
+   ).add_to(m)
+
+# call to render Folium map in Streamlit
+st_data = st_folium(m, width=700, height=350)
