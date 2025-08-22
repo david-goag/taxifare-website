@@ -60,9 +60,9 @@ params = {
 response = requests.get(url, params=params)
 
 #st.write("Fare: ", response.json()["fare"])
-names = ["Aarav", "Kabir", "Vivaan", "Mandeep", "Reyansh", "Vihaan"]
+names = ["Aarav", "Kabir", "Vivaan", "Mandeep", "Reyansh", "Vihaan"] #random.choice(names)
 f'''
-# Le debes **{round(response.json()["fare"], 2)}**$ a {random.choice(names)}.
+# Le debes **{round(response.json()["fare"], 2)}**$ a {names[3]}.
 '''
 
 m = folium.Map(location=[(pickup_latitude+dropoff_latitude)/2, (pickup_longitude+dropoff_longitude)/2], zoom_start=14)
